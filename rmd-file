@@ -1,0 +1,48 @@
+<b>Necessary codes</b><br>
+```{r echo=FALSE}
+library(tidyverse)
+library(viridis)
+heart<-read_csv("D:/DAB-501-FinalProject/heart.csv")
+```
+```{r echo=FALSE}
+heartnew<-heart%>%filter(Cholesterol<407.5 & Cholesterol>35.5 & Age>=38 & Age<=75)
+```
+<br>
+<br>
+
+<b>Analyzing multiple independent & one dependent variable.</b><br>
+<b>1st Visualization</b><br>
+In below plot we can see that number of observations are approximately equal of people having or not having heart disease, and there also not much variance in cholesterol and resting blood pressure, but we can see that people having chest pain type "ASY" are more likely to have heart disease, and in most of the cases people with heart disease "ATA" don't have heart disease. Also in some cases people with chest pain type "ASY" have high cholesterol and also high blood pressure.<br>
+
+```{r echo=FALSE}
+ggplot(data=heartnew, mapping=aes(x=RestingBP,y=Cholesterol,color=ChestPainType))+geom_point(alpha=0.5,size=3)+facet_grid(HeartDisease~.,labeller = label_both)+labs(title="Analyzing Relation B/W Four Variables",x="Resting Blood Pressure")
+```
+<br>
+
+<b>2nd Visualization</b><br>
+In the below visualization we can see that there is not much variance in Old Peak and Resting ECG but we can see that people having ST Slope "flat" are more likely to have heart disease whereas in most of the case people having ST Slope "UP" don't have heart disease, we can also point out that we have Resting ECG "Normal" in most of the cases.<br>
+
+```{r echo=FALSE}
+ggplot(data=heartnew, mapping=aes(x=MaxHR,y=Oldpeak,color=RestingECG))+geom_point(alpha=0.5,size=3)+facet_grid(ST_Slope~HeartDisease,labeller = label_both)+labs(title="Analyzing Relation B/W Four Variables",x="Resting ECG",Y="Old Peak")
+```
+<br>
+
+<b>Analyzing the data with a interactive plot</b><br>
+We can see in the below plot that People with high oldpeak are more likely to have heart disease and fall under all three reting ecg category.<br>
+
+```{r echo=FALSE}
+ggplot(data=heartnew, aes(x=Cholesterol, y=RestingBP, size=Oldpeak, color=Oldpeak)) + geom_point(alpha=0.7)+facet_grid(RestingECG~HeartDisease,labeller = label_both)+theme_minimal() + theme(panel.grid = element_blank(), text = element_text(size = 12))+scale_size(guide = "none")+scale_color_viridis(option = "plasma", begin = 0.2, name = "Oldpeak")+labs(x="Maximum Heart Rate",y="Resting Blood Pressure")
+```
+<br>
+
+Now in the below plot we can clearly see that people who don't have Fasting blood suger also have a high old peak are more likely to have heart disease.<br>
+
+```{r echo=FALSE}
+ggplot(data=heartnew, aes(x=MaxHR, y=RestingBP, color=Oldpeak)) + geom_point(aes(size=Oldpeak,alpha=0.7))+facet_grid(FastingBS~HeartDisease,labeller = label_both)+theme_minimal() + theme(panel.grid = element_blank(), text = element_text(size = 12))+scale_size(guide = "none")+scale_color_viridis(option = "plasma", begin = 0.2, name = "Oldpeak")+labs(x="Maximum Heart Rate",y="Resting Blood Pressure")
+```
+<br>
+<br>
+
+<center><h4><b>CONCLUSION</b><h4></center><br>
+
+After analyzing the heart data set we have see that people who are between age group 38 & 75 are more likely to have heart disease and among those males are higher in number than female, So we can see that age and gender are impacting the dependent variable. We have also seen from above plots that cholesterol, Resting ECG, Resting Blood Pressure, Exercise Angina are not affecting the dependent variable much, Rest of the variables are affecting the dependent variable as per above plots. I am planning to continue working on this project in future. I will now use these variables to train a machine learning model by creating decision tree or logistic regression models, then i will use the trained model on my test data to check the accuracy by studying the confusion matrix, if we get a higher accurancy than we can use the model on real time patient heart data to predict the chances of heart failure.
